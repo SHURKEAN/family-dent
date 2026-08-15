@@ -5,7 +5,7 @@ COPY pom.xml ./
 COPY src ./src
 RUN mvn -B -ntp clean package -DskipTests
 
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 
 RUN apk add --no-cache curl \
     && addgroup -S clinic \
