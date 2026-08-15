@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Giriş yap - Family Dent</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="login-page">
+<main class="login-card shadow-lg">
+    <div class="text-center mb-4">
+        <div class="brand-mark brand-mark-large mx-auto mb-3" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M7.2 3.4c1.5-.8 3.1-.3 4.8.3 1.7-.6 3.3-1.1 4.8-.3 2.2 1.2 2.8 4.3 1.8 7.1-.4 1.2-1 2.2-1.3 3.6-.5 2.5-.8 6.4-2.7 6.5-1.3 0-1.5-2.1-1.8-3.8-.2-1.1-.4-2.1-.8-2.1s-.6 1-.8 2.1c-.3 1.7-.5 3.8-1.8 3.8-1.9-.1-2.2-4-2.7-6.5-.3-1.4-.9-2.4-1.3-3.6-1-2.8-.4-5.9 1.8-7.1Z"/></svg>
+        </div>
+        <h1 class="h3 mb-1">Tekrar hoş geldiniz</h1>
+        <p class="text-secondary">Kliniği yönetmek için giriş yapın.</p>
+    </div>
+    <div th:if="${param.error}" class="alert alert-danger">Kullanıcı adı veya şifre hatalı.</div>
+    <div th:if="${param.blocked}" class="alert alert-danger">Art arda çok fazla hatalı deneme yapıldı. Lütfen 15 dakika sonra tekrar deneyin.</div>
+    <div th:if="${param.logout}" class="alert alert-success">Başarıyla çıkış yaptınız.</div>
+    <form th:action="@{/login}" method="post">
+        <div class="mb-3">
+            <label for="username" class="form-label">Kullanıcı adı</label>
+            <input id="username" name="username" class="form-control form-control-lg" autocomplete="username" autofocus required>
+        </div>
+        <div class="mb-4">
+            <label for="password" class="form-label">Şifre</label>
+            <input id="password" name="password" type="password" class="form-control form-control-lg" autocomplete="current-password" required>
+        </div>
+        <button class="btn btn-primary btn-lg w-100" type="submit">Giriş yap</button>
+    </form>
+    <div class="text-center mt-4 pt-3 border-top">
+        <p class="text-secondary small mb-2">Hasta olarak randevu mu almak istiyorsunuz?</p>
+        <a class="btn btn-outline-primary w-100" th:href="@{/randevu-al}">Randevu al</a>
+    </div>
+</main>
+<script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Çalışan ekle', ~{::main})}">
+<main>
+    <div class="page-heading"><p class="eyebrow mb-1">Yönetim</p><h1>Çalışan ekle</h1><p class="text-secondary mb-0">Güvenli bir hesap oluşturun ve bir rol atayın.</p></div>
+    <section class="content-card form-card">
+        <form th:object="${userForm}" th:action="@{/admin/users}" method="post" class="p-4">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="firstName" class="form-label">Ad *</label>
+                    <input id="firstName" class="form-control" th:field="*{firstName}"
+                           th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{firstName}"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName" class="form-label">Soyad *</label>
+                    <input id="lastName" class="form-control" th:field="*{lastName}"
+                           th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{lastName}"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="username" class="form-label">Kullanıcı adı *</label>
+                    <input id="username" class="form-control" th:field="*{username}" autocomplete="off"
+                           th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{username}"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="password" class="form-label">Geçici şifre *</label>
+                    <input id="password" type="password" class="form-control" th:field="*{password}" autocomplete="new-password"
+                           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{password}"></div>
+                    <div class="form-text">En az 8 karakter kullanın.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="role" class="form-label">Rol *</label>
+                    <select id="role" class="form-select" th:field="*{role}"
+                            th:classappend="${#fields.hasErrors('role')} ? 'is-invalid'">
+                        <option value="">Rol seçin</option>
+                        <option th:each="role : ${roles}" th:value="${role}" th:text="${role.displayName}">Rol</option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{role}"></div>
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button class="btn btn-primary" type="submit">Çalışan oluştur</button>
+                <a class="btn btn-outline-secondary" th:href="@{/admin/users}">İptal</a>
+            </div>
+        </form>
+    </section>
+</main>
+</html>

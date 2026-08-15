@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(title, content)">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title + ' - Family Dent'}">Family Dent</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark clinic-nav shadow-sm">
+        <div class="container-xl px-3 px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M7.2 3.4c1.5-.8 3.1-.3 4.8.3 1.7-.6 3.3-1.1 4.8-.3 2.2 1.2 2.8 4.3 1.8 7.1-.4 1.2-1 2.2-1.3 3.6-.5 2.5-.8 6.4-2.7 6.5-1.3 0-1.5-2.1-1.8-3.8-.2-1.1-.4-2.1-.8-2.1s-.6 1-.8 2.1c-.3 1.7-.5 3.8-1.8 3.8-1.9-.1-2.2-4-2.7-6.5-.3-1.4-.9-2.4-1.3-3.6-1-2.8-.4-5.9 1.8-7.1Z"/>
+                    </svg>
+                </span>
+                <span class="brand-copy"><strong>Family Dent</strong><small>Diş Kliniği</small></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                    aria-controls="mainNav" aria-expanded="false" aria-label="Menüyü aç veya kapat">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Ana Sayfa</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/patients}">Hastalar</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/appointments}">Randevular</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/schedule}">Takvim</a></li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','RECEPTIONIST')">
+                        <a class="nav-link" th:href="@{/appointment-requests}">Talepler</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','RECEPTIONIST')">
+                        <a class="nav-link" th:href="@{/working-hours}">Çalışma Saatleri</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" th:href="@{/admin/users}">Çalışanlar</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" th:href="@{/admin/audit-events}">Denetim Kayıtları</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-2 text-white user-area">
+                    <span class="user-chip"><span class="user-dot"></span><span sec:authentication="name">kullanıcı</span></span>
+                    <form th:action="@{/logout}" method="post">
+                        <button class="btn btn-sm logout-button" type="submit">Çıkış yap</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-xl px-3 px-lg-4 py-4 py-lg-5 app-shell">
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+        <th:block th:replace="${content}"/>
+    </div>
+
+    <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

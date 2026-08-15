@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout('Randevular', ~{::main})}">
+<main>
+    <div class="page-heading d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div><p class="eyebrow mb-1">Randevu kayıtları</p><h1>Randevular</h1><p class="text-secondary mb-0">Belirli bir tarih aralığını inceleyin.</p></div>
+        <a sec:authorize="hasAnyRole('ADMIN','RECEPTIONIST')" class="btn btn-primary" th:href="@{/appointments/new}">Yeni randevu</a>
+    </div>
+    <section class="content-card">
+        <div class="p-3 border-bottom">
+            <form class="row g-2 align-items-end" method="get" th:action="@{/appointments}">
+                <div class="col-sm-auto">
+                    <label for="from" class="form-label">Başlangıç</label>
+                    <input id="from" name="from" type="date" class="form-control" th:value="${from}">
+                </div>
+                <div class="col-sm-auto">
+                    <label for="to" class="form-label">Bitiş</label>
+                    <input id="to" name="to" type="date" class="form-control" th:value="${to}">
+                </div>
+                <div class="col-sm-auto"><button class="btn btn-outline-primary" type="submit">Uygula</button></div>
+            </form>
+        </div>
+        <div th:replace="~{fragments/appointment-table :: table(${appointments})}"></div>
+    </section>
+</main>
+</html>

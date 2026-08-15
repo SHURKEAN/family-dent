@@ -1,0 +1,11 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    password: ${DB_PASSWORD}
+  thymeleaf:
+    cache: false
+
+clinic:
+  security:
+    fingerprint-secret: ${FINGERPRINT_SECRET}

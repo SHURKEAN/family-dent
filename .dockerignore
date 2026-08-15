@@ -1,0 +1,10 @@
+.git
+.idea
+.mvn
+.tools
+target
+*.log
+.env*
+secrets
+backups
+README.md

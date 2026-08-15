@@ -1,0 +1,182 @@
+# Dental Clinic Management System
+
+## Project Idea
+Build a simple web-based **Dental Clinic Management System** for small dental clinics that currently manage patients and appointments manually using notebooks or paper.
+
+The main goal is to allow clinic staff to **store patient information, manage appointments, and keep basic records digitally**.
+
+The first version should be small and easy to use, while the architecture should allow additional features to be added in the future.
+
+## Tech Stack
+**Backend**
+
+- Java 21
+- Spring Boot 3
+- Spring Web / MVC
+- Spring Data JPA / Hibernate
+**Database**
+
+- PostgreSQL
+- Flyway for database migrations
+**Security**
+
+- Spring Security
+- Session-based authentication
+- Role-based access
+**Frontend**
+
+- Thymeleaf
+- Bootstrap
+- HTML / CSS / JavaScript
+**Development**
+
+- Maven
+- Git / GitHub
+- IntelliJ IDEA
+
+## MVP Features
+
+### 1. Login System
+Clinic employees must log in before accessing the system.
+
+Initial roles:
+
+- Admin
+- Dentist
+- Receptionist
+Different roles can have different permissions.
+
+### 2. Patient Management
+Staff can:
+
+- Add a new patient
+- Edit patient information
+- Search for patients
+- View patient profiles
+- Archive patients
+Basic patient information:
+
+- Patient ID
+- First name
+- Last name
+- Date of birth
+- Phone number
+- Email
+- Address
+- Important notes
+
+### 3. Appointment Management
+Staff can:
+
+- Create appointments
+- Select the patient
+- Select the dentist
+- Choose date and time
+- Add appointment reason
+- Reschedule appointments
+- Cancel appointments
+- Mark appointments as completed
+- Mark patients as no-show
+Appointment statuses:
+
+- Scheduled
+- Completed
+- Cancelled
+- No-show
+The system should prevent the same dentist from being booked for two appointments at the same time.
+
+### 4. Schedule
+Create a simple schedule where employees can see:
+
+- Today's appointments
+- Upcoming appointments
+- Appointment time
+- Patient
+- Dentist
+- Appointment status
+A full visual calendar can be added later.
+
+### 5. Patient History
+Inside each patient's profile, staff should be able to see:
+
+- Previous appointments
+- Upcoming appointments
+- Appointment dates
+- Dentist
+- Visit notes
+
+### 6. Visit Notes
+After an appointment, the dentist can add a simple note describing:
+
+- What was done
+- Diagnosis/observations
+- Treatment
+- Recommendations
+- Whether another appointment is required
+
+## Basic Database Structure
+**users**
+
+- id
+- username
+- password
+- role
+**patients**
+
+- id
+- first_name
+- last_name
+- date_of_birth
+- phone
+- email
+- address
+- notes
+- created_at
+- updated_at
+**appointments**
+
+- id
+- patient_id
+- dentist_id
+- appointment_date
+- start_time
+- end_time
+- reason
+- status
+**visit_notes**
+
+- id
+- appointment_id
+- dentist_id
+- note
+- created_at
+
+## Possible Future Features
+The system should be designed so these can be added later without rebuilding everything:
+
+- Visual calendar
+- SMS appointment reminders
+- WhatsApp reminders
+- Email reminders
+- Dental chart/tooth diagram
+- Treatment plans
+- X-ray and document uploads
+- Billing and invoices
+- Payment tracking
+- Patient portal
+- Online appointment booking
+- Multiple clinic locations
+- Inventory management
+- Reports and statistics
+- Automatic backups
+- Mobile application
+- REST API
+
+## Initial Goal
+The first version does **not** need to be a complete hospital management system.
+
+The goal is simply to replace the clinic's notebook with:
+
+**Login → Patients → Appointments → Schedule → Patient History → Visit Notes**
+
+Once this version works reliably, additional functionality can be added based on what the dental clinic actually needs.

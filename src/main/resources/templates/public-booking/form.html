@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Randevu Al - Family Dent</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="booking-page">
+<nav class="public-nav">
+    <div class="container-xl px-3 px-lg-4 d-flex justify-content-between align-items-center">
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/randevu-al}">
+            <span class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7.2 3.4c1.5-.8 3.1-.3 4.8.3 1.7-.6 3.3-1.1 4.8-.3 2.2 1.2 2.8 4.3 1.8 7.1-.4 1.2-1 2.2-1.3 3.6-.5 2.5-.8 6.4-2.7 6.5-1.3 0-1.5-2.1-1.8-3.8-.2-1.1-.4-2.1-.8-2.1s-.6 1-.8 2.1c-.3 1.7-.5 3.8-1.8 3.8-1.9-.1-2.2-4-2.7-6.5-.3-1.4-.9-2.4-1.3-3.6-1-2.8-.4-5.9 1.8-7.1Z"/></svg>
+            </span>
+            <span class="brand-copy"><strong>Family Dent</strong><small>Diş Kliniği</small></span>
+        </a>
+        <a class="btn btn-sm public-login-button" th:href="@{/login}">Personel girişi</a>
+    </div>
+</nav>
+
+<main class="container booking-shell px-3 px-lg-4 py-4 py-lg-5">
+    <div class="booking-hero text-center mx-auto mb-4">
+        <p class="eyebrow mb-2">Online randevu</p>
+        <h1>Size uygun zamanı seçin</h1>
+        <p>Hesap açmadan randevu talebinizi gönderin. Ekibimiz telefonla arayarak talebinizi onaylayacaktır.</p>
+    </div>
+
+    <div class="row g-4 align-items-start">
+        <div class="col-lg-5">
+            <section class="content-card booking-step-card">
+                <div class="card-heading"><div><h2><span class="step-number">1</span> Tarih ve diş hekimi</h2><p>Uygun saatleri görmek için seçim yapın.</p></div></div>
+                <form class="p-4" method="get" th:action="@{/randevu-al}">
+                    <div class="mb-3">
+                        <label for="dentistId" class="form-label">Diş hekimi</label>
+                        <select id="dentistId" name="dentistId" class="form-select" required>
+                            <option value="" th:if="${#lists.isEmpty(dentists)}">Aktif diş hekimi bulunmuyor</option>
+                            <option th:each="dentist : ${dentists}" th:value="${dentist.id}"
+                                    th:selected="${dentist.id == selectedDentistId}" th:text="${dentist.fullName}">Diş hekimi</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Tarih</label>
+                        <input id="date" name="date" type="date" class="form-control" required
+                               th:value="${selectedDate}" th:min="${today}" th:max="${maximumDate}">
+                    </div>
+                    <button class="btn btn-outline-primary w-100" type="submit" th:disabled="${#lists.isEmpty(dentists)}">Uygun saatleri göster</button>
+                </form>
+            </section>
+        </div>
+
+        <div class="col-lg-7">
+            <section class="content-card booking-step-card">
+                <div class="card-heading"><div><h2><span class="step-number">2</span> Randevu bilgileri</h2><p>Bir saat seçin ve iletişim bilgilerinizi girin.</p></div></div>
+                <div class="p-4" th:if="${#lists.isEmpty(slots)}">
+                    <div class="booking-empty">
+                        <strong>Bu tarih için uygun saat bulunamadı.</strong>
+                        <span>Başka bir tarih veya diş hekimi seçebilirsiniz.</span>
+                    </div>
+                </div>
+                <form class="p-4" th:if="${!#lists.isEmpty(slots)}" th:object="${publicBookingForm}" th:action="@{/randevu-al}" method="post">
+                    <input type="hidden" th:field="*{dentistId}">
+                    <input type="hidden" th:field="*{appointmentDate}">
+                    <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                        <div th:each="error : ${#fields.globalErrors()}" th:text="${error}">Lütfen bilgileri kontrol edin.</div>
+                    </div>
+
+                    <div class="alert alert-info booking-submit-hint" role="status">
+                        <strong>Saat seçimi tek başına talep oluşturmaz.</strong>
+                        <span>Saati seçtikten sonra bilgilerinizi doldurun ve sayfanın altındaki
+                            <strong>“Randevu talebini gönder”</strong> düğmesine basın.</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-label mb-2" th:text="${#temporals.format(selectedDate, 'dd MMMM yyyy') + ' için uygun saatler'}">Uygun saatler</div>
+                        <div class="slot-grid">
+                            <label class="slot-option" th:each="slot : ${slots}">
+                                <input type="radio" th:field="*{startTime}" th:value="${slot.startTime}" required>
+                                <span><strong th:text="${#temporals.format(slot.startTime, 'HH:mm')}">09:00</strong><small th:text="${#temporals.format(slot.endTime, 'HH:mm') + ' bitiş'}">09:30 bitiş</small></span>
+                            </label>
+                        </div>
+                        <div class="text-danger small mt-2" th:errors="*{startTime}"></div>
+                    </div>
+
+                    <div id="selectedSlotSummary" class="selected-slot-summary mb-4" aria-live="polite">
+                        <span class="selected-slot-icon" aria-hidden="true">✓</span>
+                        <span><small>Seçilen randevu</small><strong id="selectedSlotText">Henüz bir saat seçilmedi</strong></span>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">Adınız *</label>
+                            <input id="firstName" class="form-control" th:field="*{firstName}" maxlength="80" autocomplete="given-name"
+                                   th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'">
+                            <div class="invalid-feedback" th:errors="*{firstName}"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="lastName" class="form-label">Soyadınız *</label>
+                            <input id="lastName" class="form-control" th:field="*{lastName}" maxlength="80" autocomplete="family-name"
+                                   th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid'">
+                            <div class="invalid-feedback" th:errors="*{lastName}"></div>
+                        </div>
+                        <div class="col-12">
+                            <label for="phone" class="form-label">Telefon numaranız *</label>
+                            <input id="phone" type="tel" class="form-control" th:field="*{phone}" maxlength="30" autocomplete="tel"
+                                   placeholder="+994 50 123 45 67" th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid'">
+                            <div class="invalid-feedback" th:errors="*{phone}"></div>
+                            <div class="form-text">Talebinizi onaylamak için sizi bu numaradan arayacağız.</div>
+                        </div>
+                        <div class="col-12">
+                            <label for="reason" class="form-label">Randevu nedeni *</label>
+                            <textarea id="reason" class="form-control" th:field="*{reason}" rows="3" maxlength="500"
+                                      placeholder="Diş ağrısı, kontrol, temizlik…"
+                                      th:classappend="${#fields.hasErrors('reason')} ? 'is-invalid'"></textarea>
+                            <div class="invalid-feedback" th:errors="*{reason}"></div>
+                        </div>
+                    </div>
+                    <button id="bookingSubmitButton" class="btn btn-primary btn-lg w-100 mt-4" type="submit">Randevu talebini gönder</button>
+                    <p class="booking-notice mb-0 mt-3">Gönderdiğiniz talep, kliniğimiz telefonla onaylayana kadar beklemede kalır.</p>
+                </form>
+            </section>
+        </div>
+    </div>
+</main>
+<script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/public-booking.js}"></script>
+</body>
+</html>

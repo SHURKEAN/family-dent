@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Talebiniz Alındı - Family Dent</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="login-page">
+<main class="login-card booking-success-card text-center shadow-lg">
+    <div class="success-check mx-auto mb-4">✓</div>
+    <p class="eyebrow mb-2">Talebiniz alındı</p>
+    <h1 class="h2 mb-3">Teşekkür ederiz</h1>
+    <p class="text-secondary">Family Dent ekibi verdiğiniz telefon numarasından sizi arayarak randevunuzu onaylayacaktır.</p>
+    <div th:if="${referenceCode}" class="reference-code my-4">
+        <small>Talep numaranız</small><strong th:text="${referenceCode}">FD-000001</strong>
+    </div>
+    <p class="small text-secondary">Telefonla onay verilene kadar bu kayıt bir randevu talebidir.</p>
+    <a class="btn btn-primary w-100 mt-2" th:href="@{/randevu-al}">Başka bir talep oluştur</a>
+</main>
+</body>
+</html>

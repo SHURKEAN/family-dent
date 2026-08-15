@@ -1,0 +1,195 @@
+:root {
+    --clinic-navy: #0b2536;
+    --clinic-navy-soft: #123d54;
+    --clinic-blue: #087ca7;
+    --clinic-blue-dark: #08658a;
+    --clinic-mint: #32c3a3;
+    --clinic-ink: #163342;
+    --clinic-muted: #6c808b;
+    --clinic-bg: #f4f8fa;
+    --clinic-border: #dce8ed;
+    --clinic-shadow: 0 12px 35px rgba(16, 48, 64, .07);
+}
+
+* { box-sizing: border-box; }
+body {
+    min-height: 100vh;
+    margin: 0;
+    background:
+        radial-gradient(circle at 95% 8%, rgba(50, 195, 163, .08), transparent 24rem),
+        var(--clinic-bg);
+    color: var(--clinic-ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--clinic-blue); text-underline-offset: .18em; }
+a:hover { color: var(--clinic-blue-dark); }
+.app-shell { min-height: calc(100vh - 74px); }
+
+.clinic-nav {
+    min-height: 74px;
+    background: linear-gradient(110deg, var(--clinic-navy) 0%, var(--clinic-navy-soft) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
+.navbar-brand { color: #fff; margin-right: 2.25rem; }
+.navbar-brand:hover { color: #fff; }
+.brand-mark {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: .82rem;
+    background: linear-gradient(145deg, #5ce0c0, #21a9c8);
+    box-shadow: 0 8px 20px rgba(16, 185, 181, .22);
+}
+.brand-mark svg { width: 1.35rem; height: 1.35rem; fill: #fff; }
+.brand-mark-large { width: 4.5rem; height: 4.5rem; border-radius: 1.35rem; }
+.brand-mark-large svg { width: 2.5rem; height: 2.5rem; }
+.brand-copy { display: grid; line-height: 1.05; }
+.brand-copy strong { font-size: 1rem; letter-spacing: -.01em; }
+.brand-copy small { margin-top: .25rem; color: rgba(255, 255, 255, .62); font-size: .62rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; }
+.clinic-nav .navbar-nav { gap: .25rem; }
+.clinic-nav .nav-link {
+    padding: .62rem .82rem !important;
+    border-radius: .7rem;
+    color: rgba(255, 255, 255, .72);
+    font-size: .91rem;
+    font-weight: 600;
+    transition: color .15s ease, background-color .15s ease;
+}
+.clinic-nav .nav-link:hover,
+.clinic-nav .nav-link:focus { color: #fff; background: rgba(255, 255, 255, .09); }
+.user-chip { display: inline-flex; align-items: center; gap: .5rem; padding: .48rem .72rem; color: rgba(255,255,255,.82); font-size: .84rem; font-weight: 600; }
+.user-dot { width: .5rem; height: .5rem; border-radius: 50%; background: #52dfb5; box-shadow: 0 0 0 4px rgba(82,223,181,.12); }
+.logout-button { color: rgba(255,255,255,.78); border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.05); }
+.logout-button:hover { color: #fff; border-color: rgba(255,255,255,.38); background: rgba(255,255,255,.12); }
+
+.page-heading { margin: 0 0 2rem; }
+.page-heading h1 { margin-bottom: .3rem; font-size: clamp(1.9rem, 4vw, 2.65rem); font-weight: 760; letter-spacing: -.045em; color: #102e3e; }
+.eyebrow { color: var(--clinic-blue); font-weight: 750; text-transform: uppercase; letter-spacing: .11em; font-size: .72rem; }
+.text-secondary { color: var(--clinic-muted) !important; }
+
+.content-card,
+.stat-card {
+    display: block;
+    background: rgba(255, 255, 255, .96);
+    border: 1px solid var(--clinic-border);
+    border-radius: 1.1rem;
+    box-shadow: var(--clinic-shadow);
+}
+.content-card { overflow: hidden; }
+.card-heading { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.3rem 1.5rem; border-bottom: 1px solid var(--clinic-border); background: linear-gradient(180deg, #fff, #fcfeff); }
+.card-heading h2 { color: #173747; font-size: 1.08rem; font-weight: 750; margin: 0; letter-spacing: -.015em; }
+.card-heading p { color: var(--clinic-muted); margin: .24rem 0 0; font-size: .87rem; }
+.card-heading > a { font-size: .87rem; font-weight: 700; text-decoration: none; }
+
+.stat-card { position: relative; overflow: hidden; padding: 1.45rem; min-height: 10rem; color: inherit; text-decoration: none; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.stat-card::after { content: ""; position: absolute; right: -2.2rem; bottom: -3rem; width: 8rem; height: 8rem; border-radius: 50%; background: rgba(8, 124, 167, .06); }
+.stat-card:hover { color: inherit; transform: translateY(-3px); border-color: #bddce8; box-shadow: 0 18px 44px rgba(16, 48, 64, .11); }
+.stat-card strong { display: block; margin: .42rem 0 .5rem; font-size: 2.5rem; line-height: 1.1; font-weight: 760; letter-spacing: -.05em; color: #113547; }
+.stat-label { color: var(--clinic-muted); font-size: .82rem; font-weight: 700; text-transform: uppercase; letter-spacing: .055em; }
+.stat-link { position: relative; z-index: 1; color: var(--clinic-blue); font-size: .87rem; font-weight: 700; }
+.stat-card-accent { background: linear-gradient(145deg, #eafbf6 0%, #fff 72%); border-color: #bcebdd; }
+.stat-card-accent::after { background: rgba(50, 195, 163, .1); }
+
+.table { color: var(--clinic-ink); }
+.table > :not(caption) > * > * { padding: 1rem 1.1rem; border-color: #e7eff2; vertical-align: middle; }
+.table thead th { color: #647b86; font-size: .7rem; font-weight: 750; text-transform: uppercase; letter-spacing: .075em; background: #f8fbfc; white-space: nowrap; }
+.table tbody tr { transition: background-color .12s ease; }
+.table tbody tr:hover > * { background-color: #f7fbfc; }
+.table a:not(.btn) { font-weight: 650; text-decoration: none; }
+.reason-cell { max-width: 16rem; white-space: normal; color: #536b76; }
+.empty-state { text-align: center; color: #7a8e98 !important; padding: 4rem 1rem !important; font-size: .92rem; }
+.empty-state::before { content: ""; display: block; width: 2.75rem; height: 2.75rem; margin: 0 auto .8rem; border: .45rem solid #e4f0f3; border-radius: 50%; box-shadow: inset 0 0 0 .25rem #fff; }
+
+.form-card { max-width: 920px; }
+.form-label { color: #294957; font-size: .86rem; font-weight: 700; }
+.form-control,
+.form-select { min-height: 2.75rem; border-color: #cfdde3; border-radius: .68rem; }
+textarea.form-control { min-height: auto; }
+.form-control:focus,
+.form-select:focus { border-color: #66b5cf; box-shadow: 0 0 0 .22rem rgba(8, 124, 167, .11); }
+.detail-label { color: #718690; font-size: .7rem; font-weight: 750; text-transform: uppercase; letter-spacing: .075em; margin-bottom: .28rem; }
+.pre-wrap { white-space: pre-wrap; }
+.badge { padding: .48em .7em; border-radius: .55rem; font-weight: 700; }
+.btn { border-radius: .68rem; font-weight: 650; }
+.btn-primary { --bs-btn-bg: var(--clinic-blue); --bs-btn-border-color: var(--clinic-blue); --bs-btn-hover-bg: var(--clinic-blue-dark); --bs-btn-hover-border-color: var(--clinic-blue-dark); --bs-btn-active-bg: var(--clinic-blue-dark); --bs-btn-active-border-color: var(--clinic-blue-dark); box-shadow: 0 5px 14px rgba(8,124,167,.13); }
+.alert { border: 0; border-radius: .85rem; box-shadow: 0 8px 24px rgba(16,48,64,.06); }
+
+.login-page { min-height: 100vh; display: grid; place-items: center; padding: 1.5rem; background: radial-gradient(circle at 85% 15%, rgba(50,195,163,.23), transparent 25rem), radial-gradient(circle at 5% 95%, rgba(8,124,167,.13), transparent 28rem), #edf5f7; }
+.login-card { width: min(100%, 440px); padding: clamp(2rem, 5vw, 2.75rem); background: rgba(255,255,255,.96); border: 1px solid rgba(210,227,233,.95); border-radius: 1.4rem; box-shadow: 0 24px 70px rgba(13,48,65,.14) !important; backdrop-filter: blur(10px); }
+.login-card h1 { color: #102e3e; font-weight: 760; letter-spacing: -.035em; }
+
+.booking-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 90% 5%, rgba(50, 195, 163, .14), transparent 28rem),
+        radial-gradient(circle at 5% 70%, rgba(8, 124, 167, .08), transparent 32rem),
+        var(--clinic-bg);
+}
+.public-nav {
+    min-height: 74px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(110deg, var(--clinic-navy) 0%, var(--clinic-navy-soft) 100%);
+    box-shadow: 0 8px 28px rgba(11, 37, 54, .13);
+}
+.public-login-button { color: rgba(255,255,255,.88); border: 1px solid rgba(255,255,255,.28); }
+.public-login-button:hover { color: #fff; border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.1); }
+.booking-shell { max-width: 1120px; }
+.booking-hero { max-width: 680px; }
+.booking-hero h1 { color: #102e3e; font-size: clamp(2rem, 5vw, 3.15rem); font-weight: 780; letter-spacing: -.05em; }
+.booking-hero p:last-child { color: var(--clinic-muted); font-size: 1.03rem; }
+.booking-step-card { overflow: visible; }
+.booking-step-card .card-heading { border-radius: 1.1rem 1.1rem 0 0; }
+.step-number { display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; margin-right: .35rem; border-radius: .55rem; background: #e4f7f2; color: #168a73; font-size: .82rem; }
+.slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: .65rem; }
+.slot-option { cursor: pointer; }
+.slot-option input { position: absolute; opacity: 0; pointer-events: none; }
+.slot-option span { display: grid; padding: .75rem .6rem; text-align: center; border: 1px solid #cbdde4; border-radius: .72rem; background: #fff; transition: .15s ease; }
+.slot-option strong { color: #1d4558; font-size: 1rem; }
+.slot-option small { color: var(--clinic-muted); font-size: .67rem; }
+.slot-option:hover span { border-color: #64b7d2; background: #f5fbfd; }
+.slot-option input:focus-visible + span { outline: 3px solid rgba(8,124,167,.2); outline-offset: 2px; }
+.slot-option input:checked + span { color: #fff; border-color: var(--clinic-blue); background: var(--clinic-blue); box-shadow: 0 7px 18px rgba(8,124,167,.2); }
+.slot-option input:checked + span strong,
+.slot-option input:checked + span small { color: #fff; }
+.booking-empty { display: grid; gap: .4rem; padding: 3rem 1rem; text-align: center; color: var(--clinic-muted); }
+.booking-empty strong { color: #31525f; font-size: 1rem; }
+.booking-notice { color: var(--clinic-muted); font-size: .78rem; text-align: center; }
+.booking-submit-hint { display: grid; gap: .2rem; font-size: .88rem; }
+.booking-submit-hint span { color: #476b78; }
+.selected-slot-summary { display: flex; align-items: center; gap: .75rem; padding: .85rem 1rem; border: 1px dashed #b6ccd4; border-radius: .8rem; background: #f8fbfc; }
+.selected-slot-summary > span:last-child { display: grid; }
+.selected-slot-summary small { color: var(--clinic-muted); font-size: .68rem; font-weight: 750; letter-spacing: .07em; text-transform: uppercase; }
+.selected-slot-summary strong { color: #42616d; }
+.selected-slot-icon { display: grid; place-items: center; width: 2rem; height: 2rem; flex: 0 0 auto; border-radius: 50%; color: #78909a; background: #e5eef1; font-weight: 800; }
+.selected-slot-summary.is-selected { border-style: solid; border-color: #9ce0cc; background: #effbf7; }
+.selected-slot-summary.is-selected strong { color: #13745f; }
+.selected-slot-summary.is-selected .selected-slot-icon { color: #fff; background: var(--clinic-mint); }
+.success-check { display: grid; place-items: center; width: 5rem; height: 5rem; border-radius: 50%; color: #fff; background: linear-gradient(145deg, var(--clinic-mint), #18a485); font-size: 2.3rem; font-weight: 800; box-shadow: 0 14px 30px rgba(50,195,163,.25); }
+.booking-success-card { width: min(100%, 500px); }
+.reference-code { display: grid; gap: .2rem; padding: 1rem; border: 1px dashed #aacdd8; border-radius: .8rem; background: #f5fbfc; }
+.reference-code small { color: var(--clinic-muted); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+.reference-code strong { color: var(--clinic-blue-dark); font-size: 1.35rem; letter-spacing: .05em; }
+
+@media (max-width: 991px) {
+    .clinic-nav { position: static; }
+    .clinic-nav .navbar-collapse { padding: .8rem 0 .3rem; }
+    .clinic-nav .navbar-nav { margin-bottom: .75rem !important; }
+    .user-area { padding-top: .7rem; border-top: 1px solid rgba(255,255,255,.1); justify-content: space-between; }
+}
+@media (max-width: 767px) {
+    .app-shell { padding-top: 1.5rem !important; }
+    .page-heading { margin-bottom: 1.5rem; }
+    .table { min-width: 850px; }
+    .card-heading { align-items: flex-start; padding: 1.1rem 1.2rem; }
+    .content-card { border-radius: .9rem; }
+    .booking-step-card .card-heading { border-radius: .9rem .9rem 0 0; }
+    .slot-grid { grid-template-columns: repeat(3, 1fr); }
+}

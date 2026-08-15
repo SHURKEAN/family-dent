@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout('Takvim', ~{::main})}">
+<main>
+    <div class="page-heading d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div><p class="eyebrow mb-1">Günlük görünüm</p><h1>Takvim</h1><p class="text-secondary mb-0">Bugün ve önümüzdeki iki hafta.</p></div>
+        <a sec:authorize="hasAnyRole('ADMIN','RECEPTIONIST')" class="btn btn-primary" th:href="@{/appointments/new}">Yeni randevu</a>
+    </div>
+    <section class="content-card mb-4">
+        <div class="card-heading"><div><h2>Bugün</h2><p th:text="${#temporals.format(today, 'EEEE, dd MMMM')}">Bugün</p></div></div>
+        <div th:replace="~{fragments/appointment-table :: table(${todayAppointments})}"></div>
+    </section>
+    <section class="content-card">
+        <div class="card-heading"><div><h2>Yaklaşan</h2><p>Önümüzdeki 14 günün randevuları.</p></div></div>
+        <div th:replace="~{fragments/appointment-table :: table(${upcomingAppointments})}"></div>
+    </section>
+</main>
+</html>

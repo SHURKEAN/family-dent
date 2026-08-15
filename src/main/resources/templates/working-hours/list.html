@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Çalışma Saatleri', ~{::main})}">
+<main>
+    <div class="page-heading d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div><p class="eyebrow mb-1">Uygunluk yönetimi</p><h1>Çalışma saatleri</h1><p class="text-secondary mb-0">Diş hekimlerinin hastalara gösterilecek gün ve saatlerini belirleyin.</p></div>
+        <a class="btn btn-primary" th:href="@{/working-hours/new}">Çalışma saati ekle</a>
+    </div>
+    <div class="alert alert-info">Her diş hekimi ve gün için bir çalışma aralığı tanımlayın. Randevu süresi, hastalara gösterilen saat aralıklarını belirler.</div>
+    <section class="content-card">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead><tr><th>Diş hekimi</th><th>Gün</th><th>Başlangıç</th><th>Bitiş</th><th>Randevu süresi</th><th>Durum</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="hours : ${workingHours}">
+                    <td class="fw-semibold" th:text="${hours.dentist.fullName}">Diş hekimi</td>
+                    <td th:text="${hours.dayOfWeek.displayName}">1-ci gün</td>
+                    <td th:text="${#temporals.format(hours.startTime, 'HH:mm')}">09:00</td>
+                    <td th:text="${#temporals.format(hours.endTime, 'HH:mm')}">18:00</td>
+                    <td th:text="${hours.slotDurationMinutes + ' dakika'}">30 dakika</td>
+                    <td><span class="badge" th:classappend="${hours.active ? 'text-bg-success' : 'text-bg-secondary'}" th:text="${hours.active ? 'Aktif' : 'Kapalı'}">Aktif</span></td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-primary" th:href="@{/working-hours/{id}/edit(id=${hours.id})}">Düzenle</a>
+                        <form class="d-inline" th:action="@{/working-hours/{id}/delete(id=${hours.id})}" method="post">
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(workingHours)}"><td colspan="7" class="empty-state">Henüz çalışma saati tanımlanmadı.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout('Hastalar', ~{::main})}">
+<main>
+    <div class="page-heading d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div><p class="eyebrow mb-1">Hasta kayıtları</p><h1>Hastalar</h1><p class="text-secondary mb-0">Klinik hastalarını arayın ve yönetin.</p></div>
+        <a sec:authorize="hasAnyRole('ADMIN','RECEPTIONIST')" class="btn btn-primary" th:href="@{/patients/new}">Hasta ekle</a>
+    </div>
+
+    <section class="content-card">
+        <div class="p-3 border-bottom">
+            <form class="row g-2 align-items-center" method="get" th:action="@{/patients}">
+                <div class="col-md">
+                    <label class="visually-hidden" for="q">Ara</label>
+                    <input id="q" name="q" class="form-control" th:value="${q}"
+                           placeholder="Ad, telefon veya e-posta ile ara">
+                </div>
+                <div class="col-md-auto">
+                    <div class="form-check">
+                        <input id="includeArchived" name="includeArchived" value="true" type="checkbox"
+                               class="form-check-input" th:checked="${includeArchived}">
+                        <label class="form-check-label" for="includeArchived">Arşivlenenleri dahil et</label>
+                    </div>
+                </div>
+                <div class="col-md-auto d-flex gap-2">
+                    <button class="btn btn-outline-primary" type="submit">Ara</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/patients}">Temizle</a>
+                </div>
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>Hasta No</th><th>Ad soyad</th><th>Doğum tarihi</th><th>Telefon</th><th>E-posta</th><th>Durum</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="patient : ${patients}">
+                    <td class="text-secondary" th:text="${'#' + patient.id}">#1</td>
+                    <td class="fw-semibold" th:text="${patient.fullName}">Hasta</td>
+                    <td th:text="${patient.dateOfBirth != null ? #temporals.format(patient.dateOfBirth, 'dd MMM yyyy') : 'Henüz girilmedi'}">01 Oca 1990</td>
+                    <td th:text="${patient.phone}">Telefon</td>
+                    <td th:text="${patient.email ?: '—'}">E-posta</td>
+                    <td><span class="badge" th:classappend="${patient.archived ? 'text-bg-secondary' : 'text-bg-success'}"
+                              th:text="${patient.archived ? 'Arşivlendi' : 'Aktif'}">Aktif</span></td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" th:href="@{/patients/{id}(id=${patient.id})}">Aç</a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(patients)}"><td colspan="7" class="empty-state">Eşleşen hasta bulunamadı.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</html>

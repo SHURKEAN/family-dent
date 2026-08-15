@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div th:fragment="table(appointments)" class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+        <thead>
+        <tr>
+            <th>Tarih</th>
+            <th>Saat</th>
+            <th>Hasta</th>
+            <th>Diş hekimi</th>
+            <th>Neden</th>
+            <th>Durum</th>
+            <th class="text-end">İşlemler</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="appointment : ${appointments}">
+            <td class="text-nowrap" th:text="${#temporals.format(appointment.appointmentDate, 'dd MMM yyyy')}">01 Oca 2026</td>
+            <td class="text-nowrap">
+                <span th:text="${#temporals.format(appointment.startTime, 'HH:mm')}">09:00</span>–<span
+                    th:text="${#temporals.format(appointment.endTime, 'HH:mm')}">09:30</span>
+            </td>
+            <td><a th:href="@{/patients/{id}(id=${appointment.patient.id})}" th:text="${appointment.patient.fullName}">Hasta</a></td>
+            <td th:text="${appointment.dentist.fullName}">Diş hekimi</td>
+            <td class="reason-cell" th:text="${appointment.reason}">Muayene</td>
+            <td><span class="badge" th:classappend="${'text-bg-' + appointment.status.badgeClass}"
+                      th:text="${appointment.status.displayName}">Planlandı</span></td>
+            <td class="text-end text-nowrap">
+                <a th:if="${appointment.status.name() == 'SCHEDULED'}"
+                   sec:authorize="hasAnyRole('ADMIN','RECEPTIONIST')"
+                   class="btn btn-sm btn-outline-primary"
+                   th:href="@{/appointments/{id}/edit(id=${appointment.id})}">Yeniden planla</a>
+                <div th:if="${appointment.status.name() == 'SCHEDULED'}" class="btn-group">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Durum</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <form th:action="@{/appointments/{id}/status(id=${appointment.id})}" method="post">
+                                <input type="hidden" name="status" value="COMPLETED">
+                                <button class="dropdown-item" type="submit">Tamamlandı olarak işaretle</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form th:action="@{/appointments/{id}/status(id=${appointment.id})}" method="post">
+                                <input type="hidden" name="status" value="NO_SHOW">
+                                <button class="dropdown-item" type="submit">Gelmedi olarak işaretle</button>
+                            </form>
+                        </li>
+                        <li sec:authorize="hasAnyRole('ADMIN','RECEPTIONIST')"><hr class="dropdown-divider"></li>
+                        <li sec:authorize="hasAnyRole('ADMIN','RECEPTIONIST')">
+                            <form th:action="@{/appointments/{id}/status(id=${appointment.id})}" method="post">
+                                <input type="hidden" name="status" value="CANCELLED">
+                                <button class="dropdown-item text-danger" type="submit">Randevuyu iptal et</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <a th:if="${appointment.status.name() == 'COMPLETED'}"
+                   sec:authorize="hasAnyRole('ADMIN','DENTIST')"
+                   class="btn btn-sm btn-outline-success"
+                   th:href="@{/appointments/{id}/visit-note(id=${appointment.id})}"
+                   th:text="${appointment.visitNote == null ? 'Not ekle' : 'Notu düzenle'}">Not ekle</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(appointments)}">
+            <td colspan="7" class="empty-state">Randevu bulunamadı.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

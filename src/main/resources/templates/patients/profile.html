@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout('Hasta profili', ~{::main})}">
+<main>
+    <div th:if="${patient.archived}" class="alert alert-warning">Bu hasta arşivlenmiştir. Yeni randevu oluşturmak için kaydı geri yükleyin.</div>
+    <div class="page-heading d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+            <p class="eyebrow mb-1" th:text="${'Hasta #' + patient.id}">Hasta</p>
+            <h1 th:text="${patient.fullName}">Hasta adı</h1>
+            <p class="text-secondary mb-0"><span th:text="${#temporals.format(patient.createdAt, 'dd MMM yyyy')}">tarih</span> tarihinde oluşturuldu</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2" sec:authorize="hasAnyRole('ADMIN','RECEPTIONIST')">
+            <a th:if="${!patient.archived}" class="btn btn-primary" th:href="@{/appointments/new(patientId=${patient.id})}">Yeni randevu</a>
+            <a class="btn btn-outline-primary" th:href="@{/patients/{id}/edit(id=${patient.id})}">Hastayı düzenle</a>
+            <form th:action="@{/patients/{id}/archive(id=${patient.id})}" method="post">
+                <input type="hidden" name="archived" th:value="${!patient.archived}">
+                <button class="btn btn-outline-secondary" type="submit"
+                        th:text="${patient.archived ? 'Hastayı geri yükle' : 'Hastayı arşivle'}">Arşivle</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-7">
+            <section class="content-card h-100">
+                <div class="card-heading"><div><h2>İletişim ve kişisel bilgiler</h2><p>Hastanın temel bilgileri.</p></div></div>
+                <div class="p-4">
+                    <div class="row g-4">
+                        <div class="col-sm-6"><div class="detail-label">Doğum tarihi</div><div th:text="${patient.dateOfBirth != null ? #temporals.format(patient.dateOfBirth, 'dd MMMM yyyy') : 'Henüz girilmedi'}">Tarih</div></div>
+                        <div class="col-sm-6"><div class="detail-label">Telefon</div><div th:text="${patient.phone}">Telefon</div></div>
+                        <div class="col-sm-6"><div class="detail-label">E-posta</div><div th:text="${patient.email ?: 'Belirtilmedi'}">E-posta</div></div>
+                        <div class="col-sm-6"><div class="detail-label">Adres</div><div class="pre-wrap" th:text="${patient.address ?: 'Belirtilmedi'}">Adres</div></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-5">
+            <section class="content-card h-100">
+                <div class="card-heading"><div><h2>Önemli notlar</h2><p>Hasta hakkındaki genel bilgiler.</p></div></div>
+                <div class="p-4 pre-wrap" th:text="${patient.notes ?: 'Önemli bir not kaydedilmedi.'}">Notlar</div>
+            </section>
+        </div>
+    </div>
+
+    <section class="content-card mb-4">
+        <div class="card-heading"><div><h2>Randevu geçmişi</h2><p>Geçmiş ve yaklaşan randevular.</p></div></div>
+        <div th:replace="~{fragments/appointment-table :: table(${appointments})}"></div>
+    </section>
+
+    <section class="content-card" th:if="${appointments.?[visitNote != null].size() > 0}">
+        <div class="card-heading"><div><h2>Ziyaret notları</h2><p>Tamamlanan randevuların klinik notları.</p></div></div>
+        <div class="p-4">
+            <article class="visit-note mb-4 pb-4 border-bottom" th:each="appointment : ${appointments}"
+                     th:if="${appointment.visitNote != null}">
+                <div class="d-flex flex-wrap justify-content-between gap-2 mb-3">
+                    <strong th:text="${#temporals.format(appointment.appointmentDate, 'dd MMMM yyyy')}">Tarih</strong>
+                    <span class="text-secondary" th:text="${appointment.dentist.fullName}">Diş hekimi</span>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6"><div class="detail-label">Yapılan işlemler</div><div class="pre-wrap" th:text="${appointment.visitNote.proceduresPerformed}"></div></div>
+                    <div class="col-md-6"><div class="detail-label">Tanı / gözlemler</div><div class="pre-wrap" th:text="${appointment.visitNote.observations ?: '—'}"></div></div>
+                    <div class="col-md-6"><div class="detail-label">Tedavi</div><div class="pre-wrap" th:text="${appointment.visitNote.treatment ?: '—'}"></div></div>
+                    <div class="col-md-6"><div class="detail-label">Öneriler</div><div class="pre-wrap" th:text="${appointment.visitNote.recommendations ?: '—'}"></div></div>
+                    <div class="col-12" th:if="${appointment.visitNote.followUpRequired}"><span class="badge text-bg-info">Kontrol randevusu gerekli</span></div>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Randevu formu', ~{::main})}">
+<main>
+    <div class="page-heading">
+        <p class="eyebrow mb-1" th:text="${editing ? 'Randevuyu düzenle' : 'Yeni randevu'}">Randevu</p>
+        <h1 th:text="${editing ? 'Randevuyu yeniden planla' : 'Randevu oluştur'}">Randevu</h1>
+        <p class="text-secondary mb-0">Seçilen diş hekimi belirtilen zaman aralığının tamamında müsait olmalıdır.</p>
+    </div>
+    <div th:if="${#lists.isEmpty(dentists)}" class="alert alert-warning form-card">
+        Aktif bir diş hekimi hesabı bulunmuyor. Randevu oluşturabilmek için yönetici Çalışanlar bölümünden bir diş hekimi hesabı eklemelidir.
+    </div>
+    <section class="content-card form-card">
+        <form th:object="${appointmentForm}"
+              th:action="${editing} ? @{/appointments/{id}/edit(id=${appointment.id})} : @{/appointments}"
+              method="post" class="p-4">
+            <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                <div th:each="error : ${#fields.globalErrors()}" th:text="${error}">Lütfen randevu bilgilerini düzeltin.</div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="patientId" class="form-label">Hasta *</label>
+                    <select id="patientId" class="form-select" th:field="*{patientId}"
+                            th:classappend="${#fields.hasErrors('patientId')} ? 'is-invalid'">
+                        <option value="">Hasta seçin</option>
+                        <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.fullName}">Hasta</option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{patientId}"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="dentistId" class="form-label">Diş hekimi *</label>
+                    <select id="dentistId" class="form-select" th:field="*{dentistId}"
+                            th:classappend="${#fields.hasErrors('dentistId')} ? 'is-invalid'">
+                        <option value="">Diş hekimi seçin</option>
+                        <option th:each="dentist : ${dentists}" th:value="${dentist.id}" th:text="${dentist.fullName}">Diş hekimi</option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{dentistId}"></div>
+                </div>
+                <div class="col-md-4">
+                    <label for="appointmentDate" class="form-label">Tarih *</label>
+                    <input id="appointmentDate" type="date" class="form-control" th:field="*{appointmentDate}"
+                           th:classappend="${#fields.hasErrors('appointmentDate')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{appointmentDate}"></div>
+                </div>
+                <div class="col-md-4">
+                    <label for="startTime" class="form-label">Başlangıç saati *</label>
+                    <input id="startTime" type="time" step="300" class="form-control" th:field="*{startTime}"
+                           th:classappend="${#fields.hasErrors('startTime')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{startTime}"></div>
+                </div>
+                <div class="col-md-4">
+                    <label for="endTime" class="form-label">Bitiş saati *</label>
+                    <input id="endTime" type="time" step="300" class="form-control" th:field="*{endTime}"
+                           th:classappend="${#fields.hasErrors('endTime')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{endTime}"></div>
+                </div>
+                <div class="col-12">
+                    <label for="reason" class="form-label">Randevu nedeni *</label>
+                    <textarea id="reason" class="form-control" th:field="*{reason}" rows="3" maxlength="500"
+                              th:classappend="${#fields.hasErrors('reason')} ? 'is-invalid'"
+                              placeholder="Kontrol, diş ağrısı, diş temizliği…"></textarea>
+                    <div class="invalid-feedback" th:errors="*{reason}"></div>
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button class="btn btn-primary" type="submit" th:disabled="${#lists.isEmpty(dentists)}"
+                        th:text="${editing ? 'Yeni zamanı kaydet' : 'Randevu oluştur'}">Oluştur</button>
+                <a class="btn btn-outline-secondary" th:href="@{/appointments}">İptal</a>
+            </div>
+        </form>
+    </section>
+</main>
+</html>

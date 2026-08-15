@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Çalışanlar', ~{::main})}">
+<main>
+    <div class="page-heading d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div><p class="eyebrow mb-1">Yönetim</p><h1>Çalışanlar</h1><p class="text-secondary mb-0">Klinik hesaplarını ve rollerini yönetin.</p></div>
+        <a class="btn btn-primary" th:href="@{/admin/users/new}">Çalışan ekle</a>
+    </div>
+    <section class="content-card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>Ad soyad</th><th>Kullanıcı adı</th><th>Rol</th><th>Durum</th><th>Oluşturulma</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td class="fw-semibold" th:text="${user.fullName}">Çalışan</td>
+                    <td th:text="${user.username}">kullanıcı adı</td>
+                    <td th:text="${user.role.displayName}">Rol</td>
+                    <td><span class="badge" th:classappend="${user.active ? 'text-bg-success' : 'text-bg-secondary'}"
+                              th:text="${user.active ? 'Aktif' : 'Pasif'}">Aktif</span></td>
+                    <td th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy')}">Tarih</td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-primary" th:href="@{/admin/users/{id}/password(id=${user.id})}">Şifreyi sıfırla</a>
+                        <form class="d-inline" th:action="@{/admin/users/{id}/active(id=${user.id})}" method="post">
+                            <input type="hidden" name="active" th:value="${!user.active}">
+                            <button class="btn btn-sm btn-outline-secondary" type="submit"
+                                    th:text="${user.active ? 'Pasifleştir' : 'Etkinleştir'}">Pasifleştir</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</html>

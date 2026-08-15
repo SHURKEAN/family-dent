@@ -1,0 +1,72 @@
+debug: false
+
+spring:
+  application:
+    name: dental-clinic
+  profiles:
+    default: local
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/dental_clinic}
+    username: ${DB_USERNAME:dental}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+  thymeleaf:
+    cache: true
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+server:
+  shutdown: graceful
+  servlet:
+    session:
+      timeout: 60m
+  error:
+    include-message: never
+    include-stacktrace: never
+
+clinic:
+  booking:
+    request-expiration-hours: ${BOOKING_REQUEST_EXPIRATION_HOURS:24}
+    window-days: ${BOOKING_WINDOW_DAYS:60}
+    maximum-active-per-phone: ${BOOKING_MAXIMUM_ACTIVE_PER_PHONE:2}
+    maximum-requests-per-ip-per-hour: ${BOOKING_MAXIMUM_REQUESTS_PER_IP_PER_HOUR:10}
+  bootstrap-admin:
+    enabled: ${BOOTSTRAP_ADMIN_ENABLED:false}
+    username: ${BOOTSTRAP_ADMIN_USERNAME:admin}
+    password: ${BOOTSTRAP_ADMIN_PASSWORD:}
+    first-name: ${BOOTSTRAP_ADMIN_FIRST_NAME:Sistem}
+    last-name: ${BOOTSTRAP_ADMIN_LAST_NAME:Yöneticisi}
+  security:
+    fingerprint-secret: ${FINGERPRINT_SECRET}
+    audit-retention-days: ${AUDIT_RETENTION_DAYS:365}
+    login:
+      maximum-failures: ${LOGIN_MAXIMUM_FAILURES:5}
+      maximum-failures-per-ip: ${LOGIN_MAXIMUM_FAILURES_PER_IP:20}
+      window-minutes: ${LOGIN_WINDOW_MINUTES:15}
+      block-minutes: ${LOGIN_BLOCK_MINUTES:15}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true

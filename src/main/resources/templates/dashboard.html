@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout('Ana Sayfa', ~{::main})}">
+<main>
+    <div class="page-heading d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+            <p class="eyebrow mb-1" th:text="${#temporals.format(today, 'EEEE, dd MMMM yyyy')}">Bugün</p>
+            <h1>Klinik paneli</h1>
+            <p class="text-secondary mb-0">Bugünkü işlerinize hızlı bir bakış.</p>
+        </div>
+        <div class="d-flex gap-2" sec:authorize="hasAnyRole('ADMIN','RECEPTIONIST')">
+            <a class="btn btn-outline-primary" th:href="@{/patients/new}">Yeni hasta</a>
+            <a class="btn btn-primary" th:href="@{/appointments/new}">Yeni randevu</a>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <a class="stat-card" th:href="@{/patients}">
+                <span class="stat-label">Aktif hastalar</span>
+                <strong th:text="${activePatientCount}">0</strong>
+                <span class="stat-link">Hastaları görüntüle →</span>
+            </a>
+        </div>
+        <div class="col-sm-6 col-xl-3" sec:authorize="hasAnyRole('ADMIN','RECEPTIONIST')">
+            <a class="stat-card" th:href="@{/appointment-requests(status='PENDING')}">
+                <span class="stat-label">Bekleyen talepler</span>
+                <strong th:text="${pendingRequestCount}">0</strong>
+                <span class="stat-link">Talepleri incele →</span>
+            </a>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <a class="stat-card stat-card-accent" th:href="@{/schedule}">
+                <span class="stat-label">Bugünkü randevular</span>
+                <strong th:text="${scheduledTodayCount}">0</strong>
+                <span class="stat-link">Takvimi aç →</span>
+            </a>
+        </div>
+    </div>
+
+    <section class="content-card">
+        <div class="card-heading">
+            <div><h2>Bugünün randevuları</h2><p>Bugün için planlanan tüm ziyaretler.</p></div>
+            <a th:href="@{/appointments(from=${today},to=${today})}">Tümünü görüntüle</a>
+        </div>
+        <div th:replace="~{fragments/appointment-table :: table(${todayAppointments})}"></div>
+    </section>
+</main>
+</html>

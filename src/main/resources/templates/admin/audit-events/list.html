@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Denetim Kayıtları', ~{::section})}">
+<section>
+    <div class="page-heading">
+        <div><p class="eyebrow">Güvenlik</p><h1>Denetim kayıtları</h1><p>Son 250 oturum ve veri değişikliği.</p></div>
+    </div>
+    <div class="content-card table-responsive">
+        <table class="table align-middle mb-0">
+            <thead><tr><th>Zaman</th><th>Kullanıcı</th><th>Olay</th><th>Sonuç</th><th>Yol</th><th>Durum</th></tr></thead>
+            <tbody>
+            <tr th:each="event : ${auditEvents}">
+                <td class="text-nowrap" th:text="${#temporals.format(event.occurredAt, 'dd.MM.yyyy HH:mm:ss')}">15.08.2026 17:00</td>
+                <td th:text="${event.actorUsername}">admin</td>
+                <td th:text="${event.eventType}">LOGIN_SUCCESS</td>
+                <td><span class="badge text-bg-secondary" th:text="${event.outcome}">SUCCESS</span></td>
+                <td><code th:text="${event.requestPath}">/patients</code></td>
+                <td th:text="${event.statusCode}">302</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(auditEvents)}"><td colspan="6" class="empty-state">Henüz denetim kaydı bulunmuyor.</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(${editing ? 'Çalışma Saatini Düzenle' : 'Çalışma Saati Ekle'}, ~{::main})}">
+<main>
+    <div class="page-heading">
+        <p class="eyebrow mb-1">Uygunluk yönetimi</p>
+        <h1 th:text="${editing ? 'Çalışma saatini düzenle' : 'Çalışma saati ekle'}">Çalışma saati</h1>
+        <p class="text-secondary mb-0">Diş hekiminin çalıştığı aralığı ve standart randevu süresini belirleyin.</p>
+    </div>
+    <section class="content-card form-card">
+        <form class="p-4" th:object="${workingHoursForm}"
+              th:action="${editing} ? @{/working-hours/{id}(id=${hours.id})} : @{/working-hours}" method="post">
+            <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                <div th:each="error : ${#fields.globalErrors()}" th:text="${error}">Bilgileri kontrol edin.</div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="dentistId" class="form-label">Diş hekimi *</label>
+                    <select id="dentistId" class="form-select" th:field="*{dentistId}" th:classappend="${#fields.hasErrors('dentistId')} ? 'is-invalid'">
+                        <option value="">Seçin</option>
+                        <option th:each="dentist : ${dentists}" th:value="${dentist.id}" th:text="${dentist.fullName}">Diş hekimi</option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{dentistId}"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="dayOfWeek" class="form-label">Gün *</label>
+                    <select id="dayOfWeek" class="form-select" th:field="*{dayOfWeek}" th:classappend="${#fields.hasErrors('dayOfWeek')} ? 'is-invalid'">
+                        <option value="">Seçin</option>
+                        <option th:each="day : ${days}" th:value="${day}" th:text="${day.displayName}">1-ci gün</option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{dayOfWeek}"></div>
+                </div>
+                <div class="col-md-4">
+                    <label for="startTime" class="form-label">Başlangıç *</label>
+                    <input id="startTime" type="time" class="form-control" th:field="*{startTime}" th:classappend="${#fields.hasErrors('startTime')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{startTime}"></div>
+                </div>
+                <div class="col-md-4">
+                    <label for="endTime" class="form-label">Bitiş *</label>
+                    <input id="endTime" type="time" class="form-control" th:field="*{endTime}" th:classappend="${#fields.hasErrors('endTime')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{endTime}"></div>
+                </div>
+                <div class="col-md-4">
+                    <label for="slotDurationMinutes" class="form-label">Randevu süresi *</label>
+                    <select id="slotDurationMinutes" class="form-select" th:field="*{slotDurationMinutes}">
+                        <option value="15">15 dakika</option><option value="20">20 dakika</option><option value="30">30 dakika</option>
+                        <option value="45">45 dakika</option><option value="60">60 dakika</option><option value="90">90 dakika</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <div class="form-check form-switch">
+                        <input id="active" type="checkbox" class="form-check-input" th:field="*{active}">
+                        <label for="active" class="form-check-label">Bu çalışma günü aktif</label>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button class="btn btn-primary" type="submit">Kaydet</button>
+                <a class="btn btn-outline-secondary" th:href="@{/working-hours}">İptal</a>
+            </div>
+        </form>
+    </section>
+</main>
+</html>

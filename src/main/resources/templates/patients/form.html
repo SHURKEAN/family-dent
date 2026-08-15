@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Hasta formu', ~{::main})}">
+<main>
+    <div class="page-heading">
+        <p class="eyebrow mb-1" th:text="${editing ? 'Kaydı güncelle' : 'Yeni kayıt'}">Hasta kaydı</p>
+        <h1 th:text="${editing ? 'Hastayı düzenle' : 'Hasta ekle'}">Hasta ekle</h1>
+        <p class="text-secondary mb-0">* ile işaretli alanlar zorunludur.</p>
+    </div>
+    <section class="content-card form-card">
+        <form th:object="${patientForm}"
+              th:action="${editing} ? @{/patients/{id}(id=${patient.id})} : @{/patients}"
+              method="post" class="p-4">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="firstName" class="form-label">Ad *</label>
+                    <input id="firstName" class="form-control" th:field="*{firstName}"
+                           th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'" maxlength="80">
+                    <div class="invalid-feedback" th:errors="*{firstName}"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName" class="form-label">Soyad *</label>
+                    <input id="lastName" class="form-control" th:field="*{lastName}"
+                           th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid'" maxlength="80">
+                    <div class="invalid-feedback" th:errors="*{lastName}"></div>
+                </div>
+                <div class="col-md-4">
+                    <label for="dateOfBirth" class="form-label">Doğum tarihi *</label>
+                    <input id="dateOfBirth" type="date" class="form-control" th:field="*{dateOfBirth}"
+                           th:classappend="${#fields.hasErrors('dateOfBirth')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{dateOfBirth}"></div>
+                </div>
+                <div class="col-md-4">
+                    <label for="phone" class="form-label">Telefon *</label>
+                    <input id="phone" type="tel" class="form-control" th:field="*{phone}"
+                           th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid'" maxlength="30">
+                    <div class="invalid-feedback" th:errors="*{phone}"></div>
+                </div>
+                <div class="col-md-4">
+                    <label for="email" class="form-label">E-posta</label>
+                    <input id="email" type="email" class="form-control" th:field="*{email}"
+                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'" maxlength="150">
+                    <div class="invalid-feedback" th:errors="*{email}"></div>
+                </div>
+                <div class="col-12">
+                    <label for="address" class="form-label">Adres</label>
+                    <textarea id="address" class="form-control" th:field="*{address}" rows="2" maxlength="500"></textarea>
+                </div>
+                <div class="col-12">
+                    <label for="notes" class="form-label">Önemli notlar</label>
+                    <textarea id="notes" class="form-control" th:field="*{notes}" rows="4" maxlength="5000"
+                              placeholder="Alerjiler, erişilebilirlik ihtiyaçları veya diğer önemli bilgiler"></textarea>
+                    <div class="form-text">Klinik çalışanları tarafından görülebilir.</div>
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button class="btn btn-primary" type="submit" th:text="${editing ? 'Değişiklikleri kaydet' : 'Hasta ekle'}">Kaydet</button>
+                <a class="btn btn-outline-secondary" th:href="${editing ? '/patients/' + patient.id : '/patients'}">İptal</a>
+            </div>
+        </form>
+    </section>
+</main>
+</html>

@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: ${TEST_DB_URL:jdbc:postgresql://localhost:5433/dental_clinic_test}
+    username: ${TEST_DB_USERNAME:dental_test}
+    password: ${TEST_DB_PASSWORD:}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+clinic:
+  bootstrap-admin:
+    enabled: false
+  security:
+    fingerprint-secret: test-only-fingerprint-key-that-is-not-a-production-secret

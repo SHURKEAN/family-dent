@@ -1,0 +1,58 @@
+spring:
+  config:
+    import: configtree:/run/secrets/
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAXIMUM_SIZE:10}
+      minimum-idle: ${DB_POOL_MINIMUM_IDLE:2}
+      connection-timeout: 30000
+      validation-timeout: 5000
+  thymeleaf:
+    cache: true
+
+server:
+  forward-headers-strategy: framework
+  compression:
+    enabled: true
+  servlet:
+    session:
+      timeout: ${SESSION_TIMEOUT:45m}
+      cookie:
+        http-only: true
+        secure: true
+        same-site: lax
+  tomcat:
+    max-http-form-post-size: 1MB
+    max-swallow-size: 1MB
+
+clinic:
+  bootstrap-admin:
+    enabled: ${BOOTSTRAP_ADMIN_ENABLED:true}
+    username: ${BOOTSTRAP_ADMIN_USERNAME}
+    password: ${BOOTSTRAP_ADMIN_PASSWORD}
+    first-name: ${BOOTSTRAP_ADMIN_FIRST_NAME}
+    last-name: ${BOOTSTRAP_ADMIN_LAST_NAME}
+  security:
+    fingerprint-secret: ${FINGERPRINT_SECRET}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  endpoint:
+    health:
+      show-details: never
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: WARN
+    org.springframework.security: WARN
